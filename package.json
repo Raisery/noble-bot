@@ -1,0 +1,38 @@
+{
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "@discordjs/rest": "0.4.1",
+    "@discordjs/voice": "0.9.0",
+    "discord-player": "^5.2.2",
+    "discord.js": "13.6.0",
+    "dotenv": "^16.0.0",
+    "ffmpeg": "^0.0.4",
+    "ffmpeg-static": "^4.4.1",
+    "fs": "^0.0.1-security",
+    "glob": "7.2.0"
+  },
+  "name": "noble-bot",
+  "description": "Noble bot",
+  "version": "0.1.1",
+  "main": "bot.js",
+  "scripts": {
+    "test": "none"
+  },
+  "keywords": [
+    "bot",
+    "admin",
+    "discord",
+    "js"
+  ],
+  "author": "Raisery",
+  "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raisery/noble-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Raisery/noble-bot/issues"
+  },
+  "homepage": "https://github.com/Raisery/noble-bot#readme"
+}
