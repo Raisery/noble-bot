@@ -41,16 +41,10 @@ module.exports = {
                 else {
                     url = annonceData.trackUrl;
                 }
-                
-
             }
-
-            
         }
 
-        
         if (!url) return await interaction.deleteReply();
-
 
         const track = await client.player.search(url, {
             requestedBy: interaction.user
