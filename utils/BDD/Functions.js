@@ -1,4 +1,4 @@
-const { Annonce } = require('../../models');
+const { Annonce, Guild } = require('../../models');
 const { modelName } = require('../../models/annonce');
 
 module.exports = client => {
@@ -18,6 +18,24 @@ module.exports = client => {
         annonceData.trackUrl = track.url;
         annonceData.userId = user.id;
         annonceData.guildId = guild.id;
-        return Annonce.updateOne(annonceData).then(console.log(`Annonce modifié : ${user.username} de la guild ${guild.name} a enregistré ${track.title} comme annonce`));
+        return Annonce.updateOne(annonceData).then(console.log(`Annonce modifiée : ${user.username} de la guild ${guild.name} a enregistré ${track.title} comme annonce`));
+    }
+
+    client.getGuildFromBDD = async (guild) => {
+        const guildData = await Guild.findOne({ userId: user.id, guildId: guild.id });
+        return guildData
+    };
+
+    client.createGuildInBDD = async (guild) => {
+        const createGuild = new Guild({ id: guild.id, durationLimit: "0:20" });
+        createGuild.save().then(g => console.log(`Nouvelle Guild : ${guild.name} enregistrée`));
+    }
+
+    client.updateGuildInBDD = async (guild, durationLimit) => {
+        let guildData = await client.getGuildFromBDD(user, guild);
+        if(typeof guildData != 'object') guildData = {};
+        guildData.durationLimit = durationLimit;
+        guildData.id = guild.id;
+        return Guild.updateOne(guildData).then(console.log(`Guild modifiée : ${guild.name} enregistrée avec durationLimit : ${durationLimit}`));
     }
 }

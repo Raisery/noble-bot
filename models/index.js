@@ -1,3 +1,4 @@
 module.exports = {
-    Annonce: require('./annonce')
+    Annonce: require('./annonce'),
+    Guild: require('./guild')
 }
