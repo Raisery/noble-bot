@@ -22,7 +22,7 @@ module.exports = client => {
     }
 
     client.getGuildFromBDD = async (guild) => {
-        const guildData = await Guild.findOne({ userId: user.id, guildId: guild.id });
+        const guildData = await Guild.findOne({ id: guild.id });
         return guildData
     };
 
@@ -32,7 +32,7 @@ module.exports = client => {
     }
 
     client.updateGuildInBDD = async (guild, durationLimit) => {
-        let guildData = await client.getGuildFromBDD(user, guild);
+        let guildData = await client.getGuildFromBDD(guild);
         if(typeof guildData != 'object') guildData = {};
         guildData.durationLimit = durationLimit;
         guildData.id = guild.id;

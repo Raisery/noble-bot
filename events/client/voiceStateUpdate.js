@@ -17,7 +17,7 @@ module.exports = {
         //gestion des connections utilisateur
         if(o.channel == null && n.channel != null && client.annonce.get(n.id)) {
             //envoyer l'annonceur
-            const queue = client.player.createQueue(n.guild, {
+            const queue = await client.player.createQueue(n.guild, {
                 metadata: {
                     channel: n.channel
                 }
@@ -27,7 +27,7 @@ module.exports = {
                 await queue.connect(n.channel);
             } catch {
                 queue.destroy();
-                reply(interaction,"Impossible de rejoindre ton channel vocal");
+                await reply(interaction,"Impossible de rejoindre ton channel vocal");
                 return
             }
             queue.play(client.annonce.get(n.id));

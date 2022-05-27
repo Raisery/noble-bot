@@ -1,5 +1,6 @@
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
+require("discord-player/smoothVolume");
 const { default: mongoose } = require('mongoose');
 require("dotenv").config();
 const token = process.env.BOT_TOKEN;
@@ -17,17 +18,17 @@ client.annonce = new Collection();
 client.player = new Player(client);
 
 //evenements player a mettre dans le dossier ./events/player
-/* 
-client.player.on('trackStart', async (queue, track) => console.log("annonce en cours"));
-client.player.on('queueEnd', async (queue, track) => console.log("fin de l'annonce"));
-client.player.on('botDisconnect', async (queue) => console.log("destruction de la queue"));
+
+/* client.player.on('trackStart', async (queue, track) => console.log("annonce en cours"));
+client.player.on('queueEnd', async (queue, track) => console.log("fin de file"));
 client.player.on('channelEmpty', async (queue, track) => console.log("channel vide"));
 client.player.on('connectionCreate', async (queue, track) => console.log("connection crée"));
-client.player.on('connectionError', async (queue, track) => console.log("connection error"));
-client.player.on('trackEnd', async (queue, track) => console.log("fin du son")); */
+client.player.on('connectionError', async (queue, error) => console.log(`ERREUR DE CONNECTION PLAYER :${error}`));
+client.player.on('trackEnd', async (queue, track) => console.log("fin du son"));
+ */
 
-require('./utils/BDD/Functions')(client);
 ['CommandUtil', 'EventUtil'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });
+require('./utils/BDD/Functions')(client);
 
 process.on('exit', code => { console.log(`Le processus s'est arrêté avec le code: ${code}`) });
 process.on('uncaughtException', (err, origin) => { console.log(`UNCAUGHT_EXCEPTION: ${err}`, `Origine: ${origin}`) });
