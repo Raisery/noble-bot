@@ -1,21 +1,14 @@
+const { MessageEmbed } = require("discord.js");
 const sleep = require("./sleep");
 
-async function reply(channel, content ) {
-     
-     const msg = await channel.send({
-       content: ``,
-       embed: {
-         description: content,
-         color: 0xd43790
-       },
-       channel_id: keyDetails.channelId,
-       message_reference: {
-         message_id: keyDetails.messageId
-       }
-     });
-   
-     await sleep(3000);
-     await msg.delete();
-   }
-   
-   module.exports = reply;
+async function reply(message, content) {
+  const reponse = new MessageEmbed()
+    .setDescription(content);
+
+  const msg = await message.channel.send({embeds : [reponse]});
+
+  await sleep(3000);
+  await msg.delete();
+}
+
+module.exports = reply;

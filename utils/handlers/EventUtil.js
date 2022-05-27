@@ -9,10 +9,12 @@ module.exports = async client => {
         if(!eventList.includes(event.name) || !event.name) {
             return console.log(`----------\nEvenement non chargé: erreur de typo (ou pas de nom)\nFichier -> ${eventFile}\n----------`);
         }
-        if(event.once) {
+        if(event.once && !event.player) {
             client.once(event.name, (...args) => event.execute(client, ...args));
-        } else {
+        } else if(!event.player){
             client.on(event.name, (...args) => event.execute(client, ...args));
+        } else if(event.player) {
+            client.player.on(event.name, (...arg) => event.execute(client, ...args));
         }
 
         console.log(`Evenement chargé: ${event.name}`);
