@@ -1,5 +1,6 @@
 const reply = require("../../utils/tools/reply");
 const sleep = require("../../utils/tools/sleep");
+const Logger = require('../../utils/Logger');
 
 module.exports = {
     name: 'voiceStateUpdate',
@@ -15,7 +16,8 @@ module.exports = {
         }
 
         //gestion des connections utilisateur
-        if(o.channel == null && n.channel != null && client.annonce.get(n.id)) {
+        const annonce = await (await client.annonces.get(n.guild.id)).get(n.id);
+        if(o.channel == null && n.channel != null && annonce) {
             //envoyer l'annonceur
             const queue = await client.player.createQueue(n.guild, {
                 metadata: {
@@ -30,7 +32,7 @@ module.exports = {
                 await reply(interaction,"Impossible de rejoindre ton channel vocal");
                 return
             }
-            queue.play(client.annonce.get(n.id));
+            queue.play(annonce);
         }
     }
 }

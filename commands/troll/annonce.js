@@ -2,6 +2,7 @@ const isLongerThan = require('../../utils/tools/isLongerThan');
 const reply = require('../../utils/tools/reply');
 const { Annonce } = require('../../models/index');
 const Logger = require('../../utils/Logger');
+const { Collection } = require('discord.js');
 
 module.exports = {
     name: "annonce",
@@ -64,8 +65,20 @@ module.exports = {
             await reply(interaction, `❌ Annonce trop longue ou trop courte (la durée doit être inférieure à ${guild.durationLimit} et superieure a 0:06`);
             return
         }
+        
+        var guildAnnonceList = await client.annonces.get(interaction.guild.id);
+        if(!guildAnnonceList) {
+            guildAnnonceList = new Collection();
+        }
+        
+        guildAnnonceList.set(interaction.user.id, track);
+        
+        client.annonces.set(interaction.guild.id, guildAnnonceList);
 
-        client.annonce.set(interaction.user.id, track);
+
+
+
+
         let annonceSettings = await client.getAnnonceFromBDD(interaction.member.user, interaction.guild);
         if (!annonceSettings) {
             await client.createAnnonceInBDD(interaction.member.user, interaction.guild, track);

@@ -3,16 +3,15 @@ const dayjs = require('dayjs');
 
 const format = '{tstamp} {tag} {txt}\n';
 
-function info(content) {
-    write(content, 'black', 'bdWhite', 'INFO', false);
-}
 
-function error(content) {
+function error(content, promise = {}) {
     write(content, 'black', 'bgRed', 'ERROR', true);
+    console.log(promise);
 }
 
-function warn(content) {
+function warn(content, promise = {}) {
     write(content, 'black', 'bgYellow', 'WARN', false);
+    console.log(promise);
 }
 
 function typo(content) {
@@ -31,6 +30,10 @@ function client(content) {
     write(content, 'black', 'bgBlue', 'CLIENT', false);
 }
 
+function info(content) {
+    write(content, 'black', 'bgWhite', 'INFO', false);
+}
+
 function write(content, tagColor, bgTagColor, tag, error = false) {
     const timestamp = `[${dayjs().format('DD/MM - HH:mm:ss')}]`;
     const logTag = `[${tag}]`;
@@ -44,4 +47,4 @@ function write(content, tagColor, bgTagColor, tag, error = false) {
     stream.write(item);
 }
 
-module.exports = { error, warn, typo, event, command, client };
+module.exports = { error, warn, typo, event, command, client, info };

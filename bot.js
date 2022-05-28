@@ -15,15 +15,15 @@ const client = new Client({
 });
 client.commands = new Collection();
 client.troll = new Collection();
-client.annonce = new Collection();
+client.annonces = new Collection();
 client.player = new Player(client);
 
-['CommandUtil', 'EventUtil'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });
+['CommandUtil', 'EventUtil', 'DataHandler'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });
 require('./utils/BDD/Functions')(client);
 
 process.on('exit', code => { Logger.client(`Le processus s'est arrêté avec le code: ${code}`) });
 process.on('uncaughtException', (err, origin) => { Logger.error(`UNCAUGHT_EXCEPTION: ${err}`, `Origine: ${origin}`) });
-process.on('unhandledRejection', (reason, promise) => { Logger.warn(`UNHANDLED_REJECTION: ${reason}\n----------\n`, promise) });
+process.on('unhandledRejection', (reason, promise) => { Logger.warn(`UNHANDLED_REJECTION: ${reason}`, promise) });
 process.on('warning', (...args) => Logger.warn(...args));
 
 mongoose.connect(process.env.DB_URI, {

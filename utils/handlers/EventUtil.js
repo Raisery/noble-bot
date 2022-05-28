@@ -11,11 +11,11 @@ module.exports = async client => {
             return Logger.warn(`Evenement non chargé: erreur de typo (ou pas de nom) nom: ${event.name}\nFichier -> ${eventFile}`);
         }
         if(event.once && !event.player) {
-            client.once(event.name, (...args) => event.execute(client, ...args));
+            await client.once(event.name, async (...args) => await event.execute(client, ...args));
         } else if(!event.player){
-            client.on(event.name, (...args) => event.execute(client, ...args));
+            await client.on(event.name, async (...args) => await event.execute(client, ...args));
         } else if(event.player) {
-            client.player.on(event.name, (...arg) => event.execute(client, ...args));
+            await client.player.on(event.name, async (...arg) => await event.execute(client, ...args));
         }
 
         Logger.event(` - ${event.name}`);

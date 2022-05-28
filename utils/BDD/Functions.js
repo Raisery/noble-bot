@@ -1,5 +1,8 @@
+const { Collection } = require('discord.js');
 const { Annonce, Guild } = require('../../models');
+const annonce = require('../../models/annonce');
 const { modelName } = require('../../models/annonce');
+const Logger = require('../Logger');
 
 module.exports = client => {
     client.getAnnonceFromBDD = async (user, guild) => {
@@ -37,5 +40,39 @@ module.exports = client => {
         guildData.durationLimit = durationLimit;
         guildData.id = guild.id;
         return Guild.updateOne(guildData);
+    }
+
+    client.restoreAnnonce = async () => {
+        var nbEchec = 0;
+        var nbAnnonces = 0;
+
+        const annonceList = await Annonce.find({});
+        for(const annonce of annonceList) {
+            const guild = await client.guilds.cache.get(annonce.guildId);
+            
+            const users = await guild.members.fetch();
+            const user = (await users.get(annonce.userId)).user;
+
+            var guildAnnonceList = new Collection();
+            if(client.annonces.has(annonce.guildId)) {
+                guildAnnonceList = await client.annonces.get(annonce.guildId);
+            }
+            
+            const track = await client.player.search(annonce.trackUrl, {
+                requestedBy: user
+            }).then(x => x.tracks[0]);
+            
+            if (!track) {
+                Logger.error(`Immpossible de charger ${annonce.trackUrl} pour l'utilisateur ${annonce.userId}`);
+                nbEchec++;
+            }
+            else {
+                guildAnnonceList.set(user.id, track);
+                client.annonces.set(annonce.guildId, guildAnnonceList);
+                nbAnnonces++;
+            }
+        }
+        Logger.info(` - ${nbAnnonces} annonces ont été restaurées et ${nbEchec} ont été abandonnées`);
+        return 
     }
 }
