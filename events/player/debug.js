@@ -1,7 +1,6 @@
 module.exports = {
     name: 'debug',
-    once: true,
-    async execute(client, message) {        
+    async execute(client, queue, message) {        
         //console.log(message)
     }
 }
