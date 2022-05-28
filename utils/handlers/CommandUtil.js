@@ -1,15 +1,18 @@
 const { promisify } = require('util');
 const { glob } = require('glob');
 const pGlob = promisify(glob);
+const Logger = require('../Logger');
 
 module.exports = async client => {
     (await pGlob(`${process.cwd()}/commands/*/*.js`)).map(async cmdFile => {
         const cmd = require(cmdFile);
 
-        if(!cmd.name || !cmd.description) return console.log(`----------\nCommande non-chargée: pas de nom et/ou pas de description\nFichier -> ${cmdFile}\n----------`);
+        if(!cmd.name) return Logger.warn(`Commande non-chargée: ajoutez un nom à votre commande \nFichier -> ${cmdFile}`);
+        if(!cmd.description) return Logger.warn(`Commande non-chargée: ajoutez une description à votre commande \nFichier -> ${cmdFile}`);
+        
 
         client.commands.set(cmd.name, cmd);       
 
-        console.log(`Commande chargé: ${cmd.name}`);
+        Logger.command(`- ${cmd.name}`);
     });
 }

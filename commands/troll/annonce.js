@@ -1,6 +1,7 @@
 const isLongerThan = require('../../utils/tools/isLongerThan');
 const reply = require('../../utils/tools/reply');
-const { Annonce } = require('../../models/index')
+const { Annonce } = require('../../models/index');
+const Logger = require('../../utils/Logger');
 
 module.exports = {
     name: "annonce",
