@@ -14,8 +14,9 @@ const client = new Client({
     ]
 });
 client.commands = new Collection();
-client.troll = new Collection();
+client.trolls = new Collection();
 client.annonces = new Collection();
+client.guildsProfanity = new Collection();
 client.player = new Player(client);
 
 ['CommandUtil', 'EventUtil'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });

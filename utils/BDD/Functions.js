@@ -1,5 +1,5 @@
 const { Collection } = require('discord.js');
-const { Annonce, Guild } = require('../../models');
+const { Annonce, Guild, Profanity } = require('../../models');
 const annonce = require('../../models/annonce');
 const { modelName } = require('../../models/annonce');
 const Logger = require('../Logger');
@@ -78,5 +78,24 @@ module.exports = client => {
         }
         Logger.info(` - ${nbAnnonces} annonces ont été restaurées et ${nbEchec} ont été abandonnées`);
         return 
+    }
+
+    client.getProfanityFromBDD = async (guild) => {
+        const profanityParam = await Profanity.findOne({ guildId: guild.id });
+        return profanityParam
+    };
+
+    client.createProfanityInBDD = async (guild) => {
+        const createProfanity = new Profanity({ guildId: guild.id, customBadWords: [], punchlines: [] });
+        createProfanity.save();
+        return createProfanity;
+    }
+
+    client.updateProfanityInBDD = async (guild, profanityParam) => {
+        let currentProfanityParam = await client.getProfanityFromBDD(guild);
+        if(typeof currentProfanityParam != 'object') currentProfanityParam = { guildId: guild.id, customBadWords: [], punchlines: [] };
+        currentProfanityParam.customBadWords = profanityParam.customBadWords;
+        currentProfanityParam.punchlines = profanityParam.punchlines;
+        return Profanity.updateOne(currentProfanityParam);
     }
 }

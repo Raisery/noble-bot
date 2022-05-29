@@ -72,6 +72,82 @@ module.exports = {
                     ]
                 }
             ]
+        },
+        {
+            name: 'custom_bad_words',
+            type: 'SUB_COMMAND_GROUP',
+            description: 'Action sur la clé customBadWords -> Liste des badWords personnalisés',
+            options: [
+                {
+                    name: "show",
+                    description: 'Affiche la liste des badWords personnalisés',
+                    type: 'SUB_COMMAND'
+                },
+                {
+                    name: "add",
+                    description: 'Ajoute un badWord à la liste des badWords personnalisés',
+                    type: 'SUB_COMMAND',
+                    options: [
+                        {
+                            name: 'badword',
+                            description: 'badword à ajouter à la liste des badWords personnalisés',
+                            type: 'STRING',
+                            required: true,
+                        }
+                    ]
+                },
+                {
+                    name: "remove",
+                    description: 'Retire un badWord de la liste des badWords personnalisés',
+                    type: 'SUB_COMMAND',
+                    options: [
+                        {
+                            name: 'badword',
+                            description: 'badword à retirer de la liste des badWords personnalisés',
+                            type: 'STRING',
+                            required: true,
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: 'punchlines',
+            type: 'SUB_COMMAND_GROUP',
+            description: 'Action sur la clé punchlines -> Liste des badWords personnalisés',
+            options: [
+                {
+                    name: "show",
+                    description: 'Affiche la liste des punchlines personnalisés',
+                    type: 'SUB_COMMAND'
+                },
+                {
+                    name: "add",
+                    description: 'Ajoute une punchline à la liste des punchlines personnalisés',
+                    type: 'SUB_COMMAND',
+                    options: [
+                        {
+                            name: 'punchline',
+                            description: 'punchline à ajouter à la liste des punchlines personnalisés',
+                            type: 'STRING',
+                            required: true,
+                        }
+                    ]
+                },
+                {
+                    name: "remove",
+                    description: 'Retire une punchline de la liste des punchlines',
+                    type: 'SUB_COMMAND',
+                    options: [
+                        {
+                            name: 'index',
+                            description: 'Index de la punchline à retirer de la liste des punchlines',
+                            type: 'INTEGER',
+                            required: true,
+                        }
+                    ]
+                }
+            ]
         }
     ],
     run: async (client, interaction) => {
@@ -83,14 +159,14 @@ module.exports = {
             if (interaction.options._subcommand === 'set') {
                 const durationLimit = interaction.options.getString('value');
                 const format = /^\d\d[:]\d\d$/g
-                if(durationLimit.match(format)) {
+                if (durationLimit.match(format)) {
                     await client.updateGuildInBDD(interaction.guild, { durationLimit: durationLimit });
                     await interaction.reply(`Nouvelle valeur de durationLimit : ${durationLimit}`);
                 }
                 else {
                     await interaction.reply(`Format de valeur incorrecte -> la valeur doit être dans le format MINUTES:SECONDES ( ex: 04:23)`);
                 }
-                
+
             }
             return
         }
@@ -115,14 +191,87 @@ module.exports = {
                 const VC = await interaction.guild.channels.cache.get(value);
                 if (!VC || VC.type != 'GUILD_VOICE') return interaction.reply('Tu dois entrer un voice chat valide');
                 const guildData = await client.getGuildFromBDD(interaction.guild);
-                if(guildData.ignoredVC.includes(VC)) {
-                    guildData.ignoredVC.splice(guildData.ignoredVC.indexOf(VC),1);
+                if (guildData.ignoredVC.includes(VC)) {
+                    guildData.ignoredVC.splice(guildData.ignoredVC.indexOf(VC), 1);
                     await client.updateGuildInBDD(interaction.guild, guildData);
                     await interaction.reply(`${value} retiré de la liste`);
                 }
                 else {
                     await interaction.reply(`Le channel n'est pas dans la liste`);
                 }
+            }
+            return
+        }
+
+        if (interaction.options._group === 'custom_bad_words') {
+            if (interaction.options._subcommand === 'show') {
+                var profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                if (!profanityParam) profanityParam = await client.createProfanityInBDD(interaction.guild);
+                await interaction.reply(`Liste des badWords : ${profanityParam.customBadWords}`);
+            }
+            if (interaction.options._subcommand === 'add') {
+                const value = interaction.options.getString('badword');
+                const profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                profanityParam.customBadWords.push(value)
+                await client.updateProfanityInBDD(interaction.guild, profanityParam)
+
+                await interaction.reply(`Nouvelle valeur de customBadWords : ${profanityParam.customBadWords}`);
+            }
+            if (interaction.options._subcommand === 'remove') {
+                const value = interaction.options.getString('badword');
+                const profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                if (profanityParam.customBadWords.includes(value)) {
+                    profanityParam.customBadWords.splice(profanityParam.customBadWords.indexOf(value), 1);
+                    await client.updateProfanityInBDD(interaction.guild, profanityParam);
+                    await interaction.reply(`${value} retiré de la liste`);
+                }
+                else {
+                    await interaction.reply(`Le badword n'est pas dans la liste`);
+                }
+            }
+            return
+        }
+
+        if (interaction.options._group === 'punchlines') {
+            if (interaction.options._subcommand === 'show') {
+                var profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                if (!profanityParam) profanityParam = await client.createProfanityInBDD(interaction.guild);
+                var punchlines = '';
+                let index = 0;
+                for (const punch of profanityParam.punchlines) {
+                    punchlines += `${index}. ${punch}\n`
+                    index++;
+                }
+                await interaction.reply(`Liste des punchlines : \n${punchlines}`);
+            }
+            if (interaction.options._subcommand === 'add') {
+                const value = interaction.options.getString('punchline');
+                const profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                profanityParam.punchlines.push(value)
+                await client.updateProfanityInBDD(interaction.guild, profanityParam)
+
+                var punchlines = '';
+                let index = 0;
+                for (const punch of profanityParam.punchlines) {
+                    punchlines += `${index}. ${punch}\n`
+                    index++;
+                }
+                await interaction.reply(`Liste des punchlines : \n${punchlines}`);
+            }
+            if (interaction.options._subcommand === 'remove') {
+                const value = interaction.options.getInteger('index');
+                const profanityParam = await client.getProfanityFromBDD(interaction.guild);
+
+                profanityParam.punchlines.splice(value, 1);
+                await client.updateProfanityInBDD(interaction.guild, profanityParam);
+                var punchlines = '';
+                let index = 0;
+                for (const punch of profanityParam.punchlines) {
+                    punchlines += `${index}. ${punch}\n`
+                    index++;
+                }
+                await interaction.reply(`Liste des punchlines : \n${punchlines}`);
+
             }
             return
         }
