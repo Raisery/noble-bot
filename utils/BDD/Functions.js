@@ -3,6 +3,7 @@ const { Annonce, Guild, Profanity } = require('../../models');
 const annonce = require('../../models/annonce');
 const { modelName } = require('../../models/annonce');
 const Logger = require('../Logger');
+const sleep = require('../tools/sleep');
 
 module.exports = client => {
     client.getAnnonceFromBDD = async (user, guild) => {
@@ -16,12 +17,9 @@ module.exports = client => {
     }
 
     client.updateAnnonceInBDD = async (user, guild, track) => {
-        let annonceData = await client.getAnnonceFromBDD(user, guild);
-        if(typeof annonceData != 'object') annonceData = {};
+        var annonceData = await client.getAnnonceFromBDD(user, guild);
         annonceData.trackUrl = track.url;
-        annonceData.userId = user.id;
-        annonceData.guildId = guild.id;
-        return Annonce.updateOne(annonceData);
+        return await Annonce.updateOne({userId : annonceData.userId, guildId: annonceData.guildId},{trackUrl : annonceData.trackUrl});
     }
 
     client.getGuildFromBDD = async (guild) => {
@@ -42,7 +40,7 @@ module.exports = client => {
         guildData.durationLimit = durationLimit;
         guildData.ignoredVC = ignoredVC;
         guildData.id = guild.id;
-        return Guild.updateOne(guildData);
+        return await Guild.updateOne(guildData);
     }
 
 
@@ -76,7 +74,7 @@ module.exports = client => {
                 nbAnnonces++;
             }
         }
-        Logger.info(` - ${nbAnnonces} annonces ont été restaurées et ${nbEchec} ont été abandonnées`);
+        Logger.client(` - ${nbAnnonces} annonces ont été restaurées et ${nbEchec} ont été abandonnées`);
         return 
     }
 

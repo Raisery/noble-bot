@@ -2,8 +2,12 @@ const reply = require('../../utils/tools/reply');
 
 module.exports = {
     name: "tg",
-    description: 'déconnecte le bot du channel actuel',
+    description: 'Déconnecte le bot du channel actuel',
     category: 'troll',
+    permissions: [],
+    ownerOnly: false,
+    usage: '/tg',
+    examples: ['/tg'],
     run: async (client, interaction) => {
 
         await interaction.deferReply();

@@ -5,25 +5,31 @@ module.exports = {
     name: "settings",
     category: "admin",
     permissions: ['ADMINISTRATOR'],
-    ownerOnly: true,
-    usage: 'settings [key] <value>',
-    examples: ['settings', 'settings durationLimit', 'settings durationLimit 0:50'],
+    ownerOnly: false,
+    usage: 'settings #key# [subcommand] <value>',
+    examples: ['settings durationLimit show', 'settings durationLimit set 0:50'],
     description: 'Commande de paramétrage du bot',
     options: [
         {
             name: 'duration_limit',
             description: 'Action sur la clé durationLimit -> Durée maximal d\'une annonce',
             type: 'SUB_COMMAND_GROUP',
+            permissions: ['ADMINISTRATOR'],
+            usage: 'settings duration_limit [subcommand] <value>',
             options: [
                 {
                     name: 'show',
                     description: 'Affiche la valeur de durationLimit',
-                    type: 'SUB_COMMAND'
+                    type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings duration_limit show',
                 },
                 {
                     name: 'set',
                     description: 'Change la valeur de durationLimit',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings duration_limit set <value>',
                     options: [
                         {
                             name: 'value',
@@ -39,16 +45,22 @@ module.exports = {
             name: 'ignored_vc',
             type: 'SUB_COMMAND_GROUP',
             description: 'Action sur la clé ignoredVC -> Liste des voiceChannels ignorés par l\'annonce',
+            permissions: ['ADMINISTRATOR'],
+            usage: 'settings ignored_vc [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des voiceChannels ignorés',
-                    type: 'SUB_COMMAND'
+                    type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings ignored_vc show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute un voiceChannel à la liste des voiceChannels ignorés',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings ignored_vc add <channel_id>',
                     options: [
                         {
                             name: 'channel_id',
@@ -62,6 +74,8 @@ module.exports = {
                     name: "remove",
                     description: 'Retire un voiceChannel de la liste des voiceChannels ignorés',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings ignored_vc remove <channel_id>',
                     options: [
                         {
                             name: 'channel_id',
@@ -76,17 +90,23 @@ module.exports = {
         {
             name: 'custom_bad_words',
             type: 'SUB_COMMAND_GROUP',
-            description: 'Action sur la clé customBadWords -> Liste des badWords personnalisés',
+            description: 'Action sur la clé customBadWords -> Liste des badWords personnalisés',            
+            permissions: ['ADMINISTRATOR'],
+            usage: 'settings custom_bad_words [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des badWords personnalisés',
-                    type: 'SUB_COMMAND'
+                    type: 'SUB_COMMAND',                    
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings custom_bad_words show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute un badWord à la liste des badWords personnalisés',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings custom_bad_words add <badword>',
                     options: [
                         {
                             name: 'badword',
@@ -100,6 +120,8 @@ module.exports = {
                     name: "remove",
                     description: 'Retire un badWord de la liste des badWords personnalisés',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings custom_bad_words remove <badword>',
                     options: [
                         {
                             name: 'badword',
@@ -114,17 +136,23 @@ module.exports = {
         {
             name: 'punchlines',
             type: 'SUB_COMMAND_GROUP',
+            permissions: ['ADMINISTRATOR'],
             description: 'Action sur la clé punchlines -> Liste des badWords personnalisés',
+            usage: 'settings punchlines [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des punchlines personnalisés',
-                    type: 'SUB_COMMAND'
+                    type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings punchlines show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute une punchline à la liste des punchlines personnalisés',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings punchlines add <punchline>',
                     options: [
                         {
                             name: 'punchline',
@@ -138,6 +166,8 @@ module.exports = {
                     name: "remove",
                     description: 'Retire une punchline de la liste des punchlines',
                     type: 'SUB_COMMAND',
+                    permissions: ['ADMINISTRATOR'],
+                    usage: 'settings punchlines remove <index>',
                     options: [
                         {
                             name: 'index',

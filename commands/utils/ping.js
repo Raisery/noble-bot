@@ -3,6 +3,11 @@ const {MessageEmbed, Message} = require('discord.js');
 module.exports = {
     name: "ping",
     description: 'Affiche la latence du bot',
+    category: 'utils',
+    permissions: [],
+    ownerOnly: false,
+    usage: '/ping',
+    examples: ['/ping'],
     run: async (client, interaction) => {
         const embed = new MessageEmbed()
             .setTitle('📊 Ping 📊')
