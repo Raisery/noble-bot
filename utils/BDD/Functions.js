@@ -34,7 +34,10 @@ module.exports = client => {
 
     client.updateGuildInBDD = async (guild, {durationLimit = null, ignoredVC = null}) => {
         let guildData = await client.getGuildFromBDD(guild);
-        if(typeof guildData != 'object') guildData = {id: guild.id, durationLimit: "0:20", ignoredVC: []};
+        if(typeof guildData != 'object' || !guildData) {
+            guildData = {id: guild.id, durationLimit: "0:20", ignoredVC: []}
+            await client.createGuildInBDD(guild);
+        };
         if(!durationLimit) durationLimit = guildData.durationLimit;
         if(!ignoredVC) ignoredVC = guildData.ignoredVC;
         guildData.durationLimit = durationLimit;
