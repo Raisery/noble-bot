@@ -82,9 +82,15 @@ module.exports = {
             }
             if (interaction.options._subcommand === 'set') {
                 const durationLimit = interaction.options.getString('value');
-                //ajouter une verification du format de la limite
-                await client.updateGuildInBDD(interaction.guild, { durationLimit: durationLimit });
-                await interaction.reply(`Nouvelle valeur de durationLimit : ${durationLimit}`);
+                const format = /^\d\d[:]\d\d$/g
+                if(durationLimit.match(format)) {
+                    await client.updateGuildInBDD(interaction.guild, { durationLimit: durationLimit });
+                    await interaction.reply(`Nouvelle valeur de durationLimit : ${durationLimit}`);
+                }
+                else {
+                    await interaction.reply(`Format de valeur incorrecte -> la valeur doit être dans le format MINUTES:SECONDES ( ex: 04:23)`);
+                }
+                
             }
             return
         }
