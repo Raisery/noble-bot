@@ -94,7 +94,10 @@ module.exports = client => {
 
     client.updateProfanityInBDD = async (guild, profanityParam) => {
         let currentProfanityParam = await client.getProfanityFromBDD(guild);
-        if(typeof currentProfanityParam != 'object') currentProfanityParam = { guildId: guild.id, customBadWords: [], punchlines: [] };
+        if(typeof currentProfanityParam != 'object') {
+            currentProfanityParam = { guildId: guild.id, customBadWords: [], punchlines: [] };
+            await client.createProfanityInBDD(guild);
+        }
         currentProfanityParam.customBadWords = profanityParam.customBadWords;
         currentProfanityParam.punchlines = profanityParam.punchlines;
         return Profanity.updateOne(currentProfanityParam);
