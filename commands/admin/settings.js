@@ -241,7 +241,10 @@ module.exports = {
             }
             if (interaction.options._subcommand === 'add') {
                 const value = interaction.options.getString('badword');
-                const profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                var profanityParam = await client.getProfanityFromBDD(interaction.guild);
+                if(!profanityParam) {
+                    profanityParam = await client.createProfanityInBDD(interaction.guild);
+                }
                 profanityParam.customBadWords.push(value)
                 await client.updateProfanityInBDD(interaction.guild, profanityParam)
 
