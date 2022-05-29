@@ -18,7 +18,7 @@ client.troll = new Collection();
 client.annonces = new Collection();
 client.player = new Player(client);
 
-['CommandUtil', 'EventUtil', 'DataHandler'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });
+['CommandUtil', 'EventUtil'].forEach(async handler => { require(`./utils/handlers/${handler}`)(client) });
 require('./utils/BDD/Functions')(client);
 
 process.on('exit', code => { Logger.client(`Le processus s'est arrêté avec le code: ${code}`) });

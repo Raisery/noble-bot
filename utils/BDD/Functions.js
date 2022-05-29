@@ -30,17 +30,21 @@ module.exports = client => {
     };
 
     client.createGuildInBDD = async (guild) => {
-        const createGuild = new Guild({ id: guild.id, durationLimit: "0:20" });
+        const createGuild = new Guild({ id: guild.id, durationLimit: "0:20", ignoredVC: [] });
         createGuild.save();
     }
 
-    client.updateGuildInBDD = async (guild, durationLimit) => {
+    client.updateGuildInBDD = async (guild, {durationLimit = null, ignoredVC = null}) => {
         let guildData = await client.getGuildFromBDD(guild);
-        if(typeof guildData != 'object') guildData = {};
+        if(typeof guildData != 'object') guildData = {id: guild.id, durationLimit: "0:20", ignoredVC: []};
+        if(!durationLimit) durationLimit = guildData.durationLimit;
+        if(!ignoredVC) ignoredVC = guildData.ignoredVC;
         guildData.durationLimit = durationLimit;
+        guildData.ignoredVC = ignoredVC;
         guildData.id = guild.id;
         return Guild.updateOne(guildData);
     }
+
 
     client.restoreAnnonce = async () => {
         var nbEchec = 0;

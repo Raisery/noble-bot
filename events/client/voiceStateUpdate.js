@@ -17,7 +17,13 @@ module.exports = {
 
         //gestion des connections utilisateur
         const annonce = await (await client.annonces.get(n.guild.id)).get(n.id);
-        if(o.channel == null && n.channel != null && annonce) {
+        const guildData = await client.getGuildFromBDD(n.guild);
+        if(
+            (o.channel == null || guildData.ignoredVC.includes(`<#${o.channel.id}>`)) &&
+            n.channel != null && 
+            annonce &&
+            !guildData.ignoredVC.includes(`<#${n.channel.id}>`))
+        {
             //envoyer l'annonceur
             const queue = await client.player.createQueue(n.guild, {
                 metadata: {
