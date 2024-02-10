@@ -1,4 +1,4 @@
-const { MessageEmbed, Message } = require('discord.js');
+const { EmbedBuilder, Colors, ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
     name: "help",
@@ -12,19 +12,19 @@ module.exports = {
         {
             name: 'command',
             description: 'Commande sur laquelle tu veux des infos',
-            type: 'STRING'
+            type: ApplicationCommandOptionType.String
         }
     ],
     run: async (client, interaction) => {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('❓ Help ❓')
             .setThumbnail(client.user.displayAvatarURL())
-            /* .addFields(
+            .addFields(
                 {name: 'Utils', value: `\n\`/ping\` : Affiche les infos de latence du bot\n`, inline: false },
                 {name: 'Music', value: `\n\`/play\` : Joue la musique entrée en paramétre\n`, inline: false}
-            ) */
+            )
             .setTimestamp()
-            .setColor('DARK_GREEN')
+            .setColor(Colors.DarkGreen)
             .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() });
 
         var request = interaction.options.getString('command');

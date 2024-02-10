@@ -1,10 +1,10 @@
 const reply = require("../../utils/tools/reply");
 const Logger = require('../../utils/Logger');
-
+const { ApplicationCommandOptionType, ChannelType, PermissionFlagsBits} = require('discord.js')
 module.exports = {
     name: "settings",
     category: "admin",
-    permissions: ['ADMINISTRATOR'],
+    permissions: [PermissionFlagsBits.Administrator],
     ownerOnly: false,
     usage: 'settings #key# [subcommand] <value>',
     examples: ['settings durationLimit show', 'settings durationLimit set 0:50'],
@@ -13,28 +13,28 @@ module.exports = {
         {
             name: 'duration_limit',
             description: 'Action sur la clé durationLimit -> Durée maximal d\'une annonce',
-            type: 'SUB_COMMAND_GROUP',
-            permissions: ['ADMINISTRATOR'],
+            type: ApplicationCommandOptionType.SubcommandGroup,
+            permissions: [PermissionFlagsBits.Administrator],
             usage: 'settings duration_limit [subcommand] <value>',
             options: [
                 {
                     name: 'show',
                     description: 'Affiche la valeur de durationLimit',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings duration_limit show',
                 },
                 {
                     name: 'set',
                     description: 'Change la valeur de durationLimit',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings duration_limit set <value>',
                     options: [
                         {
                             name: 'value',
                             description: 'Nouvelle valeur de durationLimit en format <minute:secondes> (00:20)',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -43,29 +43,29 @@ module.exports = {
         },
         {
             name: 'ignored_vc',
-            type: 'SUB_COMMAND_GROUP',
+            type: ApplicationCommandOptionType.SubcommandGroup,
             description: 'Action sur la clé ignoredVC -> Liste des voiceChannels ignorés par l\'annonce',
-            permissions: ['ADMINISTRATOR'],
+            permissions: [PermissionFlagsBits.Administrator],
             usage: 'settings ignored_vc [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des voiceChannels ignorés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings ignored_vc show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute un voiceChannel à la liste des voiceChannels ignorés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings ignored_vc add <channel_id>',
                     options: [
                         {
                             name: 'channel_id',
                             description: 'ID du voiceChannel à ignorer',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -73,14 +73,14 @@ module.exports = {
                 {
                     name: "remove",
                     description: 'Retire un voiceChannel de la liste des voiceChannels ignorés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings ignored_vc remove <channel_id>',
                     options: [
                         {
                             name: 'channel_id',
                             description: 'ID du voiceChannel à ne plus ignorer',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -89,29 +89,29 @@ module.exports = {
         },
         {
             name: 'custom_bad_words',
-            type: 'SUB_COMMAND_GROUP',
+            type: ApplicationCommandOptionType.SubcommandGroup,
             description: 'Action sur la clé customBadWords -> Liste des badWords personnalisés',            
-            permissions: ['ADMINISTRATOR'],
+            permissions: [PermissionFlagsBits.Administrator],
             usage: 'settings custom_bad_words [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des badWords personnalisés',
-                    type: 'SUB_COMMAND',                    
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,                    
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings custom_bad_words show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute un badWord à la liste des badWords personnalisés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings custom_bad_words add <badword>',
                     options: [
                         {
                             name: 'badword',
                             description: 'badword à ajouter à la liste des badWords personnalisés',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -119,14 +119,14 @@ module.exports = {
                 {
                     name: "remove",
                     description: 'Retire un badWord de la liste des badWords personnalisés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings custom_bad_words remove <badword>',
                     options: [
                         {
                             name: 'badword',
                             description: 'badword à retirer de la liste des badWords personnalisés',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -135,29 +135,29 @@ module.exports = {
         },
         {
             name: 'punchlines',
-            type: 'SUB_COMMAND_GROUP',
-            permissions: ['ADMINISTRATOR'],
+            type: ApplicationCommandOptionType.SubcommandGroup,
+            permissions: [PermissionFlagsBits.Administrator],
             description: 'Action sur la clé punchlines -> Liste des badWords personnalisés',
             usage: 'settings punchlines [subcommand] <value>',
             options: [
                 {
                     name: "show",
                     description: 'Affiche la liste des punchlines personnalisés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings punchlines show',
                 },
                 {
                     name: "add",
                     description: 'Ajoute une punchline à la liste des punchlines personnalisés',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings punchlines add <punchline>',
                     options: [
                         {
                             name: 'punchline',
                             description: 'punchline à ajouter à la liste des punchlines personnalisés',
-                            type: 'STRING',
+                            type: ApplicationCommandOptionType.String,
                             required: true,
                         }
                     ]
@@ -165,14 +165,14 @@ module.exports = {
                 {
                     name: "remove",
                     description: 'Retire une punchline de la liste des punchlines',
-                    type: 'SUB_COMMAND',
-                    permissions: ['ADMINISTRATOR'],
+                    type: ApplicationCommandOptionType.Subcommand,
+                    permissions: [PermissionFlagsBits.Administrator],
                     usage: 'settings punchlines remove <index>',
                     options: [
                         {
                             name: 'index',
                             description: 'Index de la punchline à retirer de la liste des punchlines',
-                            type: 'INTEGER',
+                            type: ApplicationCommandOptionType.Integer,
                             required: true,
                         }
                     ]
@@ -209,7 +209,7 @@ module.exports = {
             if (interaction.options._subcommand === 'add') {
                 const value = interaction.options.getString('channel_id');
                 const VC = await interaction.guild.channels.cache.get(value);
-                if (!VC || VC.type != 'GUILD_VOICE') return interaction.reply('Tu dois entrer un voice chat valide');
+                if (!VC || VC.type != ChannelType.GuildVoice) return interaction.reply('Tu dois entrer un voice chat valide');
                 const guildData = await client.getGuildFromBDD(interaction.guild);
                 guildData.ignoredVC.push(VC)
                 await client.updateGuildInBDD(interaction.guild, guildData)
@@ -219,7 +219,7 @@ module.exports = {
             if (interaction.options._subcommand === 'remove') {
                 const value = interaction.options.getString('channel_id');
                 const VC = await interaction.guild.channels.cache.get(value);
-                if (!VC || VC.type != 'GUILD_VOICE') return interaction.reply('Tu dois entrer un voice chat valide');
+                if (!VC || VC.type != ChannelType.GuildVoice) return interaction.reply('Tu dois entrer un voice chat valide');
                 const guildData = await client.getGuildFromBDD(interaction.guild);
                 if (guildData.ignoredVC.includes(VC)) {
                     guildData.ignoredVC.splice(guildData.ignoredVC.indexOf(VC), 1);

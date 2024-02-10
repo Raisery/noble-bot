@@ -1,8 +1,8 @@
 const { default: mongoose } = require("mongoose");
 
 const profanitySchema = mongoose.Schema({
-    guildId: String,
-    customBadWords: [String],
+    guild_id: String,
+    custom_bad_words: [String],
     punchlines: [String]
 });
 

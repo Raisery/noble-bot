@@ -1,9 +1,9 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose } = require('mongoose');
 
 const annonceSchema = mongoose.Schema({
-    userId: String,
-    guildId: String,
-    trackUrl: String
+    user_id: String,
+    guild_id: String,
+    song_id: String,
 });
 
 module.exports = mongoose.model('Annonce', annonceSchema);

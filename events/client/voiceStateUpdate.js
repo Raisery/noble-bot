@@ -1,44 +1,58 @@
-const reply = require("../../utils/tools/reply");
-const sleep = require("../../utils/tools/sleep");
+const reply = require('../../utils/tools/reply');
+const sleep = require('../../utils/tools/sleep');
 const Logger = require('../../utils/Logger');
 
+require('@discordjs/opus');
+const { createAudioResource, joinVoiceChannel } = require('@discordjs/voice');
 module.exports = {
     name: 'voiceStateUpdate',
     once: false,
     async execute(client, o, n) {
-
         //gestion des connections du bot
-        if(n.member.user.bot) {
-            if(n.channel == null && client.player.getQueue(o.guild)) {
-                client.player.getQueue(o.guild).destroy();
-            }
-            return
-        }
-
-        //gestion des connections utilisateur
-        const annonce = await (await client.annonces.get(n.guild.id)).get(n.id);
-        const guildData = await client.getGuildFromBDD(n.guild);
-        if(
-            (o.channel == null || guildData.ignoredVC.includes(`<#${o.channel.id}>`)) &&
-            n.channel != null && 
-            annonce &&
-            !guildData.ignoredVC.includes(`<#${n.channel.id}>`))
-        {
-            //envoyer l'annonceur
-            const queue = await client.player.createQueue(n.guild, {
-                metadata: {
-                    channel: n.channel
+        switch (getEventTriggered(o, n)) {
+            case 'BOT':
+                return;
+            case 'CONNECTION':
+                if (n.member.user.id == '514929867779866647')
+                    playAnnonce(client, './storage/default/dun-dun-dun.mp3', n);
+                else {
+                    playAnnonce(client, './storage/default/Eeee.mp3', n);
                 }
-            });
-    
-            try {
-                await queue.connect(n.channel);
-            } catch {
-                queue.destroy();
-                await reply(interaction,"Impossible de rejoindre ton channel vocal");
-                return
-            }
-            queue.play(annonce);
+                return;
+            case 'DISCONNECTION':
+                return;
+            case 'SWITCH':
+                return;
+            case 'STREAM_ON':
+                playAnnonce(client, './storage/default/punch.mp3', n);
+                return;
+            case 'STREAM_OFF':
+                playAnnonce(client, './storage/default/punch.mp3', n);
+                return;
         }
-    }
+    },
+};
+
+function getEventTriggered(o, n) {
+    if (n.member.user.bot) return 'BOT';
+    if (n.channelId == null) return 'DISCONNECTION';
+    if (n.channelId != o.channelId && o.channelId == null) return 'CONNECTION';
+    if (n.channelId != o.channelId && o.channelId != null) return 'SWITCH';
+    if (n.streaming != o.streaming && o.streaming == false) return 'STREAM_ON';
+    if (n.streaming != o.streaming && o.streaming == true) return 'STREAM_OFF';
+    else return null;
+}
+
+function playAnnonce(client, pathSong, n) {
+    const resource = createAudioResource(pathSong, {
+        inlineVolume: true,
+    });
+    resource.volume.setVolume(0.15);
+    client.player.play(resource);
+    const connection = joinVoiceChannel({
+        channelId: n.channelId,
+        guildId: n.guild.id,
+        adapterCreator: n.guild.voiceAdapterCreator,
+    });
+    client.player.subscription = connection.subscribe(client.player);
 }
