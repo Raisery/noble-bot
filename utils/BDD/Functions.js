@@ -14,23 +14,36 @@ module.exports = (client) => {
         return annonceData;
     };
 
-    client.createAnnonceInBDD = async (user, guild, songId) => {
+    client.createAnnonceInBDD = async (user, guild, songPath) => {
         const createAnnonce = new Annonce({
             user_id: user.id,
             guild_id: guild.id,
-            song_id: songId,
+            song_path: songPath,
         });
         createAnnonce.save();
     };
 
-    client.updateAnnonceInBDD = async (user, guild, songId) => {
+    client.updateAnnonceInBDD = async (user, guild, song_path) => {
         var annonceData = await client.getAnnonceFromBDD(user, guild);
-        annonceData.song_id = songId;
-        return await Annonce.updateOne(
-            { user_id: annonceData.user_id, guild_id: annonceData.guild_id },
-            { song_id: annonceData.song_id }
-        );
+
+        if (!annonceData) {
+            annonceData = await client.createAnnonceInBDD(
+                user,
+                guild,
+                song_path
+            );
+        } else {
+            annonceData.song_path = song_path;
+            return await Annonce.updateOne(
+                {
+                    user_id: annonceData.user_id,
+                    guild_id: annonceData.guild_id,
+                },
+                { song_path: annonceData.song_path }
+            );
+        }
     };
+
     client.getSongFromBDD = async (song, guild) => {
         const songData = await Song.findOne({
             title: song.title,
@@ -119,7 +132,7 @@ module.exports = (client) => {
                 guildAnnonceList = await client.annonces.get(annonce.guild_id);
             }
 
-            guildAnnonceList.set(user.id, songId);
+            guildAnnonceList.set(user.id, annonce.song_path);
             client.annonces.set(annonce.guild_id, guildAnnonceList);
             nbAnnonces++;
         }

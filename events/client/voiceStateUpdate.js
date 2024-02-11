@@ -13,18 +13,18 @@ module.exports = {
             case 'BOT':
                 return;
             case 'CONNECTION':
-                if (n.member.user.id == '514929867779866647')
-                    playAnnonce(client, './storage/default/dun-dun-dun.mp3', n);
-                else {
-                    playAnnonce(client, './storage/default/Eeee.mp3', n);
-                }
+                const annonce = await client.getAnnonceFromBDD(
+                    n.member.user,
+                    n.guild
+                );
+                playAnnonce(client, annonce.song_path, n);
                 return;
             case 'DISCONNECTION':
                 return;
             case 'SWITCH':
                 return;
             case 'STREAM_ON':
-                playAnnonce(client, './storage/default/punch.mp3', n);
+                playAnnonce(client, './storage/default/windows start.mp3', n);
                 return;
             case 'STREAM_OFF':
                 playAnnonce(client, './storage/default/punch.mp3', n);

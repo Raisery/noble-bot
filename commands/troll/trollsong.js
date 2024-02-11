@@ -81,18 +81,17 @@ module.exports = {
         },
     ],
     run: async (client, interaction) => {
-        await interaction.deferReply();
+        interaction.deferReply();
         if (interaction.options._subcommand === 'add') {
             trollSong_add(client, interaction);
         }
         if (interaction.options._subcommand === 'test') {
-            await trollSong_test(client, interaction);
+            trollSong_test(client, interaction);
         }
         if (interaction.options._subcommand === 'list') {
-            await trollSong_list(client, interaction);
-        } else {
-            interaction.deleteReply();
+            trollSong_list(client, interaction);
         }
+        interaction.deleteReply();
     },
 };
 
@@ -107,7 +106,6 @@ async function trollSong_add(client, interaction) {
         'trolls',
         titre.value
     );
-    interaction.deleteReply();
     if (downloaded) {
         const song = {
             guild_id: interaction.guild.id,
@@ -140,7 +138,8 @@ async function trollSong_test(client, interaction) {
     });
     const song = songList[id];
     if (song) {
-        const resource = createAudioResource(song.path);
+        const resource = createAudioResource(song.path, { inlineVolume: true });
+        resource.volume.setVolume(0.3);
         client.player.play(resource);
         const connection = joinVoiceChannel({
             channelId: interaction.member.voice.channelId,
@@ -149,14 +148,12 @@ async function trollSong_test(client, interaction) {
         });
         client.player.subscription = connection.subscribe(client.player);
     } else {
-        interaction.deleteReply();
         await reply(interaction, "L'id ne correspond à aucun son!");
     }
 }
 
 async function trollSong_list(client, interaction) {
     const songList = await client.getSongListFromBDD(interaction.guild);
-    console.log(songList);
     const embed = new EmbedBuilder()
         .setTitle('🎶  Liste  🎶')
         .setThumbnail(client.user.displayAvatarURL())
@@ -177,5 +174,4 @@ async function trollSong_list(client, interaction) {
         embeds: [embed],
         fetchReply: true,
     });
-    await interaction.deleteReply();
 }

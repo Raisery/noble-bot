@@ -59,11 +59,24 @@ module.exports = {
             if (!guildAnnonceList) {
                 guildAnnonceList = new Collection();
             }
+            const trollSongList = await client.getSongListFromBDD(
+                interaction.guild
+            );
+            if (!trollSongList[songId]) {
+                interaction.deleteReply();
+                reply(interaction, "❌ L'id ne correspond à aucun son !");
+                return;
+            }
 
-            guildAnnonceList.set(interaction.user.id, songId);
+            var annonceBDD = await client.updateAnnonceInBDD(
+                interaction.user,
+                interaction.guild,
+                trollSongList[songId].path
+            );
+            guildAnnonceList.set(interaction.user.id, trollSongList[songId]);
             client.annonces.set(interaction.guild.id, guildAnnonceList);
-            await interaction.deleteReply();
-            await reply(interaction, '✔ Annonce enregistrée');
+            interaction.deleteReply();
+            reply(interaction, '✔ Annonce enregistrée');
             return;
         }
 
