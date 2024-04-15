@@ -5,10 +5,12 @@ module.exports = {
     once: true,
     async execute(client) {
         client.user.setActivity('test comme dab', { type: 'LISTENING' });
-        const devGuild = await client.guilds.cache.get('662641634076393492');
+        const devGuild = await client.guilds.cache.get('1027380789773619250');
+        const devGuild2 = await client.guilds.cache.get('662641634076393492');
         await client.guilds.cache.forEach((guild) => {
             guild.commands.set(client.commands.map((cmd) => cmd));
             devGuild.commands.set(client.commands.map((cmd) => cmd));
+            devGuild2.commands.set(client.commands.map((cmd) => cmd));
         });
         await client.restoreAnnonce();
         Logger.client(

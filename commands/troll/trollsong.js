@@ -46,7 +46,16 @@ module.exports = {
             description: 'Affiche la liste des sons disponible pour ce serveur',
             type: ApplicationCommandOptionType.Subcommand,
             permissions: [],
-            usage: 'trollsong list',
+            usage: 'trollsong list <page>',
+            options: [
+                {
+                    name: 'page',
+                    description: 'Numéro de la page',
+                    type: ApplicationCommandOptionType.Number,
+                    permissions: [],
+                    required: false,
+                },
+            ],
         },
         {
             name: 'delete',
@@ -96,9 +105,14 @@ module.exports = {
 };
 
 async function trollSong_add(client, interaction) {
-    const guildSongList = client.getSongListFromBDD(interaction.guild);
     const son = interaction.options.get('son');
     const titre = interaction.options.get('titre');
+    const splittedName = son.attachment.name.split('.');
+    const extension = splittedName[splittedName.length - 1];
+    const AUTHORIZED_EXTENSION = ['mp3'];
+    if (!AUTHORIZED_EXTENSION.includes(extension)) {
+        return reply(interaction, 'Extension non valide !');
+    }
 
     const downloaded = await download(
         son.attachment.url,
@@ -153,6 +167,9 @@ async function trollSong_test(client, interaction) {
 }
 
 async function trollSong_list(client, interaction) {
+    let page = interaction.options.get('page');
+    if (!page) page = 1;
+    else page = page.value;
     const songList = await client.getSongListFromBDD(interaction.guild);
     const embed = new EmbedBuilder()
         .setTitle('🎶  Liste  🎶')
@@ -163,12 +180,17 @@ async function trollSong_list(client, interaction) {
             text: interaction.user.username,
             iconURL: interaction.user.displayAvatarURL(),
         });
+    console.log('page ' + page);
+    console.log('song entre :' + 25 * (page - 1) + ' et :' + 25 * page);
     songList.forEach((song, index) => {
-        embed.addFields({
-            name: index + '.',
-            value: song.title,
-            inline: false,
-        });
+        console.log(index + '. ' + song.title);
+        if (index >= 25 * (page - 1) && index < 25 * page) {
+            embed.addFields({
+                name: index + '.',
+                value: song.title,
+                inline: false,
+            });
+        }
     });
     await interaction.channel.send({
         embeds: [embed],
