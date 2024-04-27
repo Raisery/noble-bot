@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose');
+import mongoose from 'mongoose';
 
 const songSchema = mongoose.Schema({
     guild_id: String,
@@ -11,4 +11,5 @@ const songSchema = mongoose.Schema({
     id: String,
 });
 
-module.exports = mongoose.model('Song', songSchema);
+const Song = mongoose.model('Song', songSchema);
+export default Song;

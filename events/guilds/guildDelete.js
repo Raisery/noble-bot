@@ -3,11 +3,11 @@ import API from '../../utils/Database/api/API.js'
 import Logger from '../../utils/Logger.js'
 
 export default {
-	name: 'guildCreate',
+	name: 'guildDelete',
 	once: false,
 	async execute(client, guild) {
-		API.AdvertGuild.create(guild.id, guild.name)
-		Logger.client(" - I was invited in '" + guild.name + "' with id :" + guild.id)
+		API.AdvertGuild.remove(guild.id)
+		Logger.client(" - I was kicked of '" + guild.name + "' with id :" + guild.id)
 		//client.createGuildInBDD(guild)
 		//fs.mkdirSync('./storage/' + guild.id + '/')
 		//fs.mkdirSync('./storage/' + guild.id + '/trolls/')

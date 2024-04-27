@@ -35,5 +35,6 @@
     "bugs": {
         "url": "https://github.com/Raisery/noble-bot/issues"
     },
-    "homepage": "https://github.com/Raisery/noble-bot#readme"
+    "homepage": "https://github.com/Raisery/noble-bot#readme",
+    "type": "module"
 }

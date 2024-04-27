@@ -1,8 +1,7 @@
-const chalk = require('chalk');
-const dayjs = require('dayjs');
+import chalk from 'chalk';
+import dayjs from 'dayjs';
 
 const format = '{tstamp} {tag} {txt}\n';
-
 
 function error(content, promise = {}) {
     write(content, 'black', 'bgRed', 'ERROR', true);
@@ -46,5 +45,5 @@ function write(content, tagColor, bgTagColor, tag, error = false) {
 
     stream.write(item);
 }
-
-module.exports = { error, warn, typo, event, command, client, info };
+const Logger = { error, warn, typo, event, command, client, info };
+export default Logger;
