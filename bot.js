@@ -6,12 +6,6 @@ import * as mongoose from 'mongoose'
 import Functions from './utils/Database/mongo/Functions.js'
 import CommandUtil from './utils/handlers/CommandUtil.js'
 import EventUtil from './utils/handlers/EventUtil.js'
-import create from './utils/Database/api/AdvertGuild/create.js'
-import get from './utils/Database/api/AdvertGuild/get.js'
-import remove from './utils/Database/api/AdvertGuild/remove.js'
-import update from './utils/Database/api/AdvertGuild/update.js'
-import InitializeApi from './utils/Database/api/API.js'
-import API from './utils/Database/api/API.js'
 
 const apiUrl = process.env.API_URL
 const token = process.env.BOT_TOKEN

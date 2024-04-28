@@ -1,5 +1,7 @@
-import AdvertGuild from './AdvertGuild/AdvertGuild.js'
+import AdvertGuild from './AdvertGuild/index.js'
+import AdvertSong from './AdvertSong/index.js'
 
 export default {
 	AdvertGuild,
+	AdvertSong,
 }
